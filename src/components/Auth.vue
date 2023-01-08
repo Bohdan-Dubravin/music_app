@@ -89,7 +89,10 @@
             </button>
           </form>
           <!-- Registration Form -->
-          <vee-form v-show="tab === 'register'" :validation-schema="schema">
+          <vee-form
+            v-show="tab === 'register'"
+            :validation-schema="registerSchema"
+          >
             <!-- Name -->
             <div class="mb-3">
               <label class="inline-block mb-2">Name</label>
@@ -104,37 +107,45 @@
             <!-- Email -->
             <div class="mb-3">
               <label class="inline-block mb-2">Email</label>
-              <input
+              <vee-field
+                name="email"
                 type="email"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Email"
               />
+              <ErrorMessage class="text-red-600" name="email" />
             </div>
             <!-- Age -->
             <div class="mb-3">
               <label class="inline-block mb-2">Age</label>
-              <input
+              <vee-field
+                name="age"
                 type="number"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               />
+              <ErrorMessage class="text-red-600" name="age" />
             </div>
             <!-- Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Password</label>
-              <input
+              <vee-field
+                name="password"
                 type="password"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Password"
               />
+              <ErrorMessage class="text-red-600" name="password" />
             </div>
             <!-- Confirm Password -->
             <div class="mb-3">
               <label class="inline-block mb-2">Confirm Password</label>
               <input
+                name="passwordConfirmation"
                 type="password"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Confirm Password"
               />
+              <ErrorMessage class="text-red-600" name="passwordConfirmation" />
             </div>
             <!-- Country -->
             <div class="mb-3">
@@ -149,9 +160,11 @@
             </div>
             <!-- TOS -->
             <div class="mb-3 pl-6">
+              <ErrorMessage class="text-red-600" name="tos" />
               <input
                 type="checkbox"
                 class="w-4 h-4 float-left -ml-6 mt-1 rounded"
+                name="tos"
               />
               <label class="inline-block">Accept terms of service</label>
             </div>
@@ -170,18 +183,10 @@
 <script>
 import { ref, computed } from 'vue';
 import { useModalStore } from '@/stores/modal';
+import { registerSchema } from '../utils/validation';
 export default {
   name: 'Auth',
   setup() {
-    const schema = {
-      name: 'required',
-      email: '',
-      age: '',
-      password: '',
-      confirm_password: '',
-      country: '',
-      tos: '',
-    };
     const store = useModalStore();
     const tab = ref('login');
 
@@ -189,7 +194,7 @@ export default {
       tab.value = tabName;
     }
 
-    return { store, tab, changeTab, schema };
+    return { store, tab, changeTab, registerSchema };
   },
 };
 </script>
