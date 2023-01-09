@@ -91,7 +91,9 @@
 </template>
 <script>
 import { registerSchema } from '@/utils/validation'
-import { auth } from '@/firebase/firebaseConfig'
+import { createUserWithEmailAndPassword } from 'firebase/auth'
+import { auth, db } from '../utils/indexF'
+import { addDoc, collection } from 'firebase/firestore/lite'
 export default {
   name: 'registerForm',
   data() {
@@ -100,12 +102,18 @@ export default {
   methods: {
     async register(values) {
       try {
-        const userCredentials = await createUserWithEmailAndPassword(
+        await createUserWithEmailAndPassword(
           auth,
           values.email,
           values.password
         )
-        console.log(userCredentials)
+
+        await addDoc(collection(db, 'users'), {
+          name: values.name,
+          email: values.email,
+          age: values.age,
+          country: values.country,
+        })
       } catch (error) {
         console.log(error)
       }
