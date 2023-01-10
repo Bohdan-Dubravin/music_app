@@ -91,29 +91,19 @@
 </template>
 <script>
 import { registerSchema } from '@/utils/validation';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '../utils/firestoreConfig';
-import { addDoc, collection } from 'firebase/firestore/lite';
+import { mapActions } from 'pinia';
+import { useUserStore } from '@/stores/user';
+
 export default {
   name: 'registerForm',
   data() {
     return { registerSchema, isLoading: false };
   },
   methods: {
+    ...mapActions(useUserStore, { createUser: 'register' }),
     async register(values) {
       try {
-        await createUserWithEmailAndPassword(
-          auth,
-          values.email,
-          values.password
-        );
-
-        await addDoc(collection(db, 'users'), {
-          name: values.name,
-          email: values.email,
-          age: values.age,
-          country: values.country,
-        });
+        this.createUser(values);
       } catch (error) {
         console.log(error);
       }
