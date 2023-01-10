@@ -90,14 +90,14 @@
   </vee-form>
 </template>
 <script>
-import { registerSchema } from '@/utils/validation'
-import { createUserWithEmailAndPassword } from 'firebase/auth'
-import { auth, db } from '../utils/indexF'
-import { addDoc, collection } from 'firebase/firestore/lite'
+import { registerSchema } from '@/utils/validation';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth, db } from '../utils/firestoreConfig';
+import { addDoc, collection } from 'firebase/firestore/lite';
 export default {
   name: 'registerForm',
   data() {
-    return { registerSchema, isLoading: false }
+    return { registerSchema, isLoading: false };
   },
   methods: {
     async register(values) {
@@ -106,19 +106,19 @@ export default {
           auth,
           values.email,
           values.password
-        )
+        );
 
         await addDoc(collection(db, 'users'), {
           name: values.name,
           email: values.email,
           age: values.age,
           country: values.country,
-        })
+        });
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
   },
-}
+};
 </script>
 <style></style>
