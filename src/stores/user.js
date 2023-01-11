@@ -1,11 +1,12 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
+import { auth, db } from '@/utils/firestoreConfig';
 import {
+  updateProfile,
+  signOut,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
-import { auth, db } from '@/utils/firestoreConfig';
-import { updateProfile } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore/lite';
 
 export const useUserStore = defineStore('user', () => {
@@ -19,6 +20,7 @@ export const useUserStore = defineStore('user', () => {
     userLoggedIn.value = true;
   }
 
+  //Login
   async function authenticate(values) {
     const user = await signInWithEmailAndPassword(
       auth,
@@ -30,6 +32,7 @@ export const useUserStore = defineStore('user', () => {
     console.log(user);
   }
 
+  //register
   async function register(values) {
     const user = await createUserWithEmailAndPassword(
       auth,
@@ -53,11 +56,17 @@ export const useUserStore = defineStore('user', () => {
     userLoggedIn.value = true;
   }
 
+  //Sign out
+  async function signOutProfile() {
+    await signOut(auth);
+    userLoggedIn.value = false;
+  }
   return {
     toggleIsLoggedIn,
     userLoggedIn,
     register,
     setIsLoggedIn,
     authenticate,
+    signOutProfile,
   };
 });
