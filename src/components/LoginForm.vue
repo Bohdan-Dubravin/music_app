@@ -31,20 +31,27 @@
   </vee-form>
 </template>
 <script>
-import { loginSchema } from '../utils/validation'
+import { loginSchema } from '../utils/validation';
+import { mapActions } from 'pinia';
+import { useUserStore } from '@/stores/user';
 
 export default {
   name: 'LoginComponent',
   data() {
     return {
       loginSchema,
-    }
+    };
   },
   methods: {
-    login(values) {
-      console.log(values)
+    ...mapActions(useUserStore, ['authenticate']),
+    async login(values) {
+      try {
+        await this.authenticate(values);
+      } catch (error) {
+        console.log(error);
+      }
     },
   },
-}
+};
 </script>
 <style></style>

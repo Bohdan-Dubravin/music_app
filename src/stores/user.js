@@ -1,15 +1,33 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+} from 'firebase/auth';
 import { auth, db } from '@/utils/firestoreConfig';
 import { updateProfile } from 'firebase/auth';
-import { addDoc, collection, setDoc } from 'firebase/firestore/lite';
+import { doc, setDoc } from 'firebase/firestore/lite';
 
 export const useUserStore = defineStore('user', () => {
   const userLoggedIn = ref(false);
 
   function toggleIsLoggedIn() {
     userLoggedIn.value = !userLoggedIn.value;
+  }
+
+  function setIsLoggedIn() {
+    userLoggedIn.value = true;
+  }
+
+  async function authenticate(values) {
+    const user = await signInWithEmailAndPassword(
+      auth,
+      values.email,
+      values.password
+    );
+    userLoggedIn.value = true;
+
+    console.log(user);
   }
 
   async function register(values) {
@@ -19,7 +37,9 @@ export const useUserStore = defineStore('user', () => {
       values.password
     );
 
-    await setDoc(collection(db, 'users/' + user.user.uid), {
+    const docRef = doc(db, 'users', `${user.user.uid}`);
+
+    await setDoc(docRef, {
       name: values.name,
       email: values.email,
       age: values.age,
@@ -33,5 +53,11 @@ export const useUserStore = defineStore('user', () => {
     userLoggedIn.value = true;
   }
 
-  return { toggleIsLoggedIn, userLoggedIn, register };
+  return {
+    toggleIsLoggedIn,
+    userLoggedIn,
+    register,
+    setIsLoggedIn,
+    authenticate,
+  };
 });
