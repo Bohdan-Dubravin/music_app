@@ -6,7 +6,14 @@ import Manage from '@/views/Manage.vue';
 const routes = [
   { path: '/', component: Home },
   { path: '/about', component: About },
-  { path: '/manage', alias: '/manage-music', component: Manage },
+  {
+    path: '/manage',
+    alias: '/manage-music',
+    component: Manage,
+    meta: {
+      requiresAuth: true,
+    },
+  },
   { path: '/:catchAll(.*)*', redirect: '/' },
 ];
 

@@ -21,7 +21,7 @@
           </li>
           <template v-else="userLoggedIn">
             <li>
-              <router-link class="px-2 text-white" to="manage"
+              <router-link class="px-2 text-white" to="/manage"
                 >Manage</router-link
               >
             </li>
@@ -39,12 +39,14 @@
 <script>
 import { useModalStore } from '@/stores/modal';
 import { useUserStore } from '@/stores/user';
+import { useRouter, useRoute } from 'vue-router';
 export default {
   name: 'Header',
   setup() {
     const modalStore = useModalStore();
     const userStore = useUserStore();
-
+    const router = useRouter();
+    const route = useRoute();
     function toggleAuthModal() {
       modalStore.toggleIsOpen();
     }
@@ -52,6 +54,10 @@ export default {
     async function signOut() {
       try {
         await userStore.signOutProfile();
+        console.log(route);
+        if (route.meta.requiresAuth) {
+          router.push('/');
+        }
       } catch (error) {
         console.log(error);
       }
