@@ -9,7 +9,7 @@ export const registerSchema = yup.object({
     .required('Enter name'),
   email: yup.string().required().email('Enter valid email'),
   age: yup.number('Age should be a number').required('Enter age'),
-  password: yup.string().required('Enter password').min(5, 'Min length 5'),
+  password: yup.string().required('Enter password').min(6, 'Min length 6'),
   // passwordConfirmation: yup
   //   .string()
   //   .test('passwords-match', 'Passwords must match', function (value) {
@@ -21,7 +21,12 @@ export const registerSchema = yup.object({
 
 export const loginSchema = yup.object({
   email: yup.string().required().email('Enter valid email'),
-  password: yup.string().required('Enter password').min(5, 'Min length 5'),
+  password: yup.string().required('Enter password').min(6, 'Min length 6'),
+})
+
+export const songSchema = yup.object({
+  modifiedName: yup.string().required('Enter song name').min(5, 'Min length 5'),
+  genre: yup.string().required('Enter genre').min(2, 'Min length 2'),
 })
 
 export default {
