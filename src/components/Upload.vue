@@ -20,6 +20,7 @@
         >
           <h5>Drop your files here</h5>
         </div>
+        <input type="file" multiple @change="upload($event)" />
         <hr class="my-6" />
         <!-- Progess Bars -->
         <div class="mb-4" v-for="upload in uploads" :key="upload.name">
@@ -42,8 +43,9 @@
   </div>
 </template>
 <script>
-import { storage, auth } from '@/utils/firestoreConfig';
-import { ref, uploadBytesResumable } from 'firebase/storage';
+import { storage, auth, db } from '@/utils/firestoreConfig';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { doc, addDoc, Timestamp, collection } from 'firebase/firestore/lite';
 export default {
   name: 'Upload',
   data() {
@@ -56,7 +58,9 @@ export default {
     upload($event) {
       this.is_dragover = false;
 
-      const files = [...$event.dataTransfer.files];
+      const files = $event.dataTransfer
+        ? [...$event.dataTransfer.files]
+        : [...$event.target.files];
 
       files.forEach((file) => {
         const fileType = file.type;
@@ -100,7 +104,10 @@ export default {
               comment_count: 0,
             };
 
-            song.url = await uploadTask.snapshot.ref.getDownloadUrl();
+            song.url = await getDownloadURL(storageRef);
+
+            const docRef = collection(db, 'songs');
+            await addDoc(docRef, song);
             this.uploads[uploadIndex].variant = 'bg-green-400';
             this.uploads[uploadIndex].icon = 'fas fa-check';
             this.uploads[uploadIndex].text_class = 'text-green-400';
@@ -108,6 +115,11 @@ export default {
         );
       });
     },
+  },
+  beforeUnmount() {
+    this.uploads.forEach((upload) => {
+      upload.uploadTask.cancel();
+    });
   },
 };
 </script>
