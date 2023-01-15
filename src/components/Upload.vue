@@ -45,9 +45,10 @@
 <script>
 import { storage, auth, db } from '@/utils/firestoreConfig';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { doc, addDoc, Timestamp, collection } from 'firebase/firestore/lite';
+import { addDoc, Timestamp, collection } from 'firebase/firestore/lite';
 export default {
   name: 'Upload',
+  props: ['addSong'],
   data() {
     return {
       is_dragover: false,
@@ -108,6 +109,9 @@ export default {
 
             const docRef = collection(db, 'songs');
             await addDoc(docRef, song);
+
+            this.addSong(song);
+
             this.uploads[uploadIndex].variant = 'bg-green-400';
             this.uploads[uploadIndex].icon = 'fas fa-check';
             this.uploads[uploadIndex].text_class = 'text-green-400';
@@ -123,4 +127,4 @@ export default {
   },
 };
 </script>
-<style lang=""></style>
+<style></style>

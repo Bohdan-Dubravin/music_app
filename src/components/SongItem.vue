@@ -1,9 +1,10 @@
-<template lang="">
+<template>
   <div class="border border-gray-200 p-3 mb-4 rounded">
     <div v-if="!showForm">
-      <h4 class="inline-block text-2xl font-bold">Song Name</h4>
+      <h4 class="inline-block text-lg font-bold">{{ song.modifiedName }}</h4>
       <button
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        @click.prevent="deleteSong"
       >
         <i class="fa fa-times"></i>
       </button>
@@ -15,7 +16,11 @@
       </button>
     </div>
     <div v-if="showForm">
-      <vee-form :validation-schema="songSchema" @submit="editSong">
+      <vee-form
+        :validation-schema="songSchema"
+        @submit="editSong"
+        :initial-values="song"
+      >
         <div class="mb-3">
           <label class="inline-block mb-2">Song Title</label>
           <vee-field
@@ -23,6 +28,7 @@
             name="modifiedName"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
+            @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="modifiedName" />
         </div>
@@ -33,6 +39,7 @@
             name="genre"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Genre"
+            @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="genre" />
         </div>
@@ -54,9 +61,10 @@
   </div>
 </template>
 <script>
-import { songSchema } from '@/utils/validation'
-import { collection, doc, updateDoc } from 'firebase/firestore/lite'
-import { auth, db } from '@/utils/firestoreConfig'
+import { songSchema } from '@/utils/validation';
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore/lite';
+import { db, storage } from '@/utils/firestoreConfig';
+import { deleteObject, ref } from '@firebase/storage';
 export default {
   name: 'SongItem',
   props: {
@@ -64,24 +72,52 @@ export default {
       type: Object,
       required: true,
     },
+    updateSong: {
+      type: Function,
+      required: true,
+    },
+    index: {
+      type: Number,
+      required: true,
+    },
+    updateUnsavedFlag: {
+      type: Function,
+    },
   },
 
   data() {
     return {
       songSchema,
       showForm: false,
-    }
+    };
   },
   methods: {
     async editSong(values) {
       try {
-        const songRef = doc(db, 'songs', this.song.songId)
-        await updateDoc(songRef, values)
+        const songRef = doc(db, 'songs', this.song.songId);
+        await updateDoc(songRef, values);
       } catch (error) {
-        console.log(error)
+        console.log(error);
+        return;
+      }
+
+      this.updateSong(this.index, values);
+      this.showForm = false;
+      this.updateUnsavedFlag(false);
+    },
+    async deleteSong() {
+      try {
+        const storageRef = ref(storage, `songs/${this.song.originalName}`);
+        await deleteObject(storageRef);
+
+        await deleteDoc(doc(db, 'songs', this.song.songId));
+
+        this.$emit('deleteSong', this.song.songId);
+      } catch (error) {
+        console.log(error);
       }
     },
   },
-}
+};
 </script>
 <style lang=""></style>
