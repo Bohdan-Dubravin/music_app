@@ -54,6 +54,7 @@ export default {
   data() {
     return {
       songs: [],
+      lastDocument: null,
     };
   },
   async mounted() {
@@ -73,22 +74,28 @@ export default {
       }
     },
     async getSongs() {
-      const firstQuery = query(
-        songsCollection,
-        orderBy('modifiedName'),
-        limit(5)
-      );
-      const snapshots = await getDocs(firstQuery);
-      const lastVisible = snapshots.docs[snapshots.docs.length - 1];
+      let snapshots;
 
-      const nextQuery = query(
-        songsCollection,
-        orderBy('modifiedName'),
-        startAfter(lastVisible),
-        limit(5)
-      );
-      const nextSnapshots = await getDocs(nextQuery);
-      nextSnapshots.forEach((snap) => {
+      if (!this.lastDocument) {
+        const firstQuery = query(
+          songsCollection,
+          orderBy('modifiedName', 'asc'),
+          limit(5)
+        );
+        snapshots = await getDocs(firstQuery);
+        this.lastDocument = snapshots.docs[snapshots.docs.length - 1];
+      } else {
+        const nextQuery = query(
+          songsCollection,
+          orderBy('modifiedName', 'asc'),
+          startAfter(this.lastDocument),
+          limit(5)
+        );
+        snapshots = await getDocs(nextQuery);
+        this.lastDocument = snapshots.docs[snapshots.docs.length - 1];
+      }
+
+      snapshots.forEach((snap) => {
         this.songs.push({ ...snap.data(), songId: snap.id });
       });
     },
