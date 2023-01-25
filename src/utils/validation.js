@@ -29,6 +29,14 @@ export const songSchema = yup.object({
   genre: yup.string().required('Enter genre').min(2, 'Min length 2'),
 })
 
+export const commentSchema = yup.object({
+  commentText: yup
+    .string()
+    .required('Enter comment text')
+    .min(5, 'Min length 5')
+    .max(250, 'Max length 250'),
+})
+
 export default {
   install(app, options) {
     app.component('VeeForm', VeeForm)

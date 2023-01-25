@@ -14,7 +14,6 @@
           </div>
           <div class="p-6">
             <!-- Composition Items -->
-
             <song-item
               v-for="(song, i) in songs"
               :key="song.songId"
