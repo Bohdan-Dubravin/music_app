@@ -8,6 +8,7 @@
     <div class="container mx-auto flex items-center">
       <!-- Play/Pause Button -->
       <button
+        @click.prevent="newSong(song)"
         type="button"
         class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
       >
@@ -90,8 +91,9 @@ import {
   where,
 } from 'firebase/firestore/lite'
 import { commentSchema } from '@/utils/validation'
-import { mapState } from 'pinia'
+import { mapState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
+import { usePlayerStore } from '@/stores/player'
 
 export default {
   name: 'Song',
@@ -105,7 +107,7 @@ export default {
       sortOrder: 'desc',
     }
   },
-  async mounted() {
+  async created() {
     try {
       const docRef = doc(db, 'songs', this.$route.params.id)
       const docSnap = await getDoc(docRef)
@@ -128,6 +130,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(usePlayerStore, ['newSong']),
     async addComment(values, actions) {
       try {
         const comment = {
