@@ -18,7 +18,10 @@
       <!-- Current Position -->
       <div class="player-currenttime">{{ seek }}</div>
       <!-- Scrub Container  -->
-      <div class="w-full h-2 rounded bg-gray-200 relative cursor-pointer">
+      <div
+        @click.prevent="updateSeek"
+        class="w-full h-2 rounded bg-gray-200 relative cursor-pointer"
+      >
         <!-- Player Ball -->
         <span
           class="absolute -top-2.5 -ml-2.5 text-gray-800 text-lg"
@@ -38,12 +41,12 @@
   </div>
 </template>
 <script>
-import { usePlayerStore } from '@/stores/player';
-import { mapState, mapActions } from 'pinia';
+import { usePlayerStore } from '@/stores/player'
+import { mapState, mapActions } from 'pinia'
 export default {
   name: 'Player',
   methods: {
-    ...mapActions(usePlayerStore, ['toggleAudio']),
+    ...mapActions(usePlayerStore, ['toggleAudio', 'updateSeek']),
   },
   computed: {
     ...mapState(usePlayerStore, [
@@ -54,6 +57,6 @@ export default {
       'currentSong',
     ]),
   },
-};
+}
 </script>
 <style lang=""></style>

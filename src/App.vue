@@ -2,7 +2,11 @@
   <!-- Header -->
   <Header />
 
-  <router-view></router-view>
+  <router-view v-slot="{ Component }">
+    <transition name="route" mode="out-in">
+      <component :is="Component"></component>
+    </transition>
+  </router-view>
   <Player />
   <!-- Auth Modal -->
   <auth></auth>
@@ -30,5 +34,32 @@ export default {
       this.setIsLoggedIn()
     }
   },
+  watch: {
+    $route(to, from) {
+      const toDepth = to.path.split('/').length
+      const fromDepth = from.path.split('/').length
+      this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+    },
+  },
 }
 </script>
+
+<style>
+.route-enter-from {
+  opacity: 0;
+  transform: translateX(100px);
+}
+
+.route-enter-active {
+  transition: all 0.5s ease-out;
+}
+
+.route-leave-to {
+  opacity: 0;
+  transform: translateX(-100px);
+}
+
+.route-leave-active {
+  transition: all 0.5s ease-in;
+}
+</style>
