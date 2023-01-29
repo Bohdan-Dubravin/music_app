@@ -3,8 +3,8 @@
     class="w-full h-full flex flex-col bg-zinc-900 hover:bg-zinc-800 !p-[12px] transition rounded-[12px] hover:-translate-y-2"
   >
     <div
-      @click.prevent="newSong(song)"
-      class="relative group w-full h-[250px] mb-[16px]"
+      @click.prevent="playSong"
+      class="cursor-pointer relative group w-full h-[250px] mb-[16px]"
     >
       <div
         class="absolute-center transition-all invisible group-hover:visible w-[72px] h-[72px] bg-[rgba(0,0,0,0.5)] z-20 absolute rounded-full border"
@@ -49,8 +49,10 @@
   </li>
 </template>
 <script>
-import { mapState, mapActions } from 'pinia';
+import { mapActions } from 'pinia';
 import { usePlayerStore } from '@/stores/player';
+import { useImageStore } from '@/stores/bgImage';
+
 export default {
   props: {
     song: {
@@ -60,6 +62,11 @@ export default {
   },
   methods: {
     ...mapActions(usePlayerStore, ['newSong']),
+    ...mapActions(useImageStore, ['changeImage']),
+    playSong() {
+      this.newSong(this.song);
+      this.changeImage(this.song.songImage);
+    },
   },
 };
 </script>

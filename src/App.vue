@@ -1,8 +1,8 @@
 <template>
-  <div class="absolute px-4 mx-auto -z-10 top-0 left-0 right-0 w-full">
+  <div class="fixed px-4 mx-auto -z-10 top-0 left-0 right-0 w-full">
     <img
-      class="object-cover w-[100%] max-h-[500px]"
-      src="/assets/img/profile-pic.jpg"
+      class="transition-all object-cover w-[100%] max-h-[500px]"
+      :src="imageUrl ? imageUrl : ' /assets/img/profile-pic.jpg'"
       alt="bg-img"
     />
   </div>
@@ -21,10 +21,12 @@
 <script>
 import Header from '@/components/Header.vue';
 import Auth from '@/components/Auth.vue';
-import { mapActions } from 'pinia';
+import { mapActions, mapState } from 'pinia';
 import { auth } from '@/utils/firestoreConfig';
-import { useUserStore } from './stores/user';
+import { useUserStore } from '@/stores/user';
+import { useImageStore } from '@/stores/bgImage';
 import Player from './components/Player.vue';
+
 export default {
   name: 'App',
   components: {
@@ -34,6 +36,9 @@ export default {
   },
   methods: {
     ...mapActions(useUserStore, ['setIsLoggedIn']),
+  },
+  computed: {
+    ...mapState(useImageStore, ['imageUrl']),
   },
   created() {
     if (auth.currentUser) {
