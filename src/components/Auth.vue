@@ -1,5 +1,6 @@
 <template>
   <div
+    v-if="!user.userLoggedIn && store.isOpen"
     class="fixed z-10 inset-0 overflow-y-auto"
     :class="store.hiddenClass"
     id="modal"
@@ -17,19 +18,19 @@
       >
 
       <div
-        class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+        class="inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
       >
         <!-- Add margin if you want to see some of the overlay behind the modal-->
         <div class="py-4 text-left px-6">
           <!--Title-->
           <div class="flex justify-between items-center pb-4">
-            <p class="text-2xl font-bold">Your Account</p>
+            <p class="text-2xl text-white font-bold">Your Account</p>
             <!-- Modal Close Button -->
             <div
               class="modal-close cursor-pointer z-50"
               @click="store.toggleIsOpen"
             >
-              <i class="fas fa-times"></i>
+              <i class="fas fa-times text-white"></i>
             </div>
           </div>
 
@@ -39,8 +40,10 @@
               <a
                 class="block rounded py-3 px-4 transition"
                 :class="{
-                  'hover:text-white text-white bg-blue-600': tab === 'login',
-                  'hover:text-blue-600': tab === 'register',
+                  'hover:bg-[rgba(185,141,221,0.12)] font-bold text-[#d6a4ff] bg-[rgba(214,164,255,0.12)]':
+                    tab === 'login',
+                  'bg-[rgba(131,129,129,0.12)] font-bold text-white':
+                    tab === 'register',
                 }"
                 href="#"
                 @click.prevent="changeTab('login')"
@@ -52,8 +55,10 @@
                 class="block rounded py-3 px-4 transition"
                 href="#"
                 :class="{
-                  'hover:text-white text-white bg-blue-600': tab === 'register',
-                  'hover:text-blue-600': tab === 'login',
+                  'hover:bg-[rgba(185,141,221,0.12)] font-bold text-[#d6a4ff] bg-[rgba(214,164,255,0.12)]':
+                    tab === 'register',
+                  'bg-[rgba(131,129,129,0.12)] font-bold text-white':
+                    tab === 'login',
                 }"
                 @click.prevent="changeTab('register')"
                 >Register</a
@@ -68,28 +73,31 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue'
-import { useModalStore } from '@/stores/modal'
-import LoginForm from '@/components/LoginForm.vue'
-import RegisterForm from '@/components/RegisterForm.vue'
+import { ref } from 'vue';
+import { useModalStore } from '@/stores/modal';
+import { useUserStore } from '@/stores/user';
+import LoginForm from '@/components/LoginForm.vue';
+import RegisterForm from '@/components/RegisterForm.vue';
 
 export default {
   name: 'Auth',
   components: { LoginForm, RegisterForm },
   setup() {
-    const store = useModalStore()
-    const tab = ref('login')
+    const store = useModalStore();
+    const user = useUserStore();
+    const tab = ref('login');
 
     function changeTab(tabName) {
-      tab.value = tabName
+      tab.value = tabName;
     }
 
     return {
       store,
       tab,
       changeTab,
-    }
+      user,
+    };
   },
-}
+};
 </script>
 <style></style>

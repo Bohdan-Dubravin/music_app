@@ -1,5 +1,5 @@
-<template lang="">
-  <header id="header" class="bg-gray-700">
+<template>
+  <header id="header" class="bg-[rgba(18,18,18,0.7)] z-20">
     <nav class="container mx-auto flex justify-start items-center py-5 px-4">
       <!-- App Name -->
       <router-link

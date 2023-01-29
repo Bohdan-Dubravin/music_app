@@ -9,6 +9,10 @@ import {
 } from 'firebase/auth';
 import { doc, setDoc } from 'firebase/firestore/lite';
 
+import { signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
+
+const provider = new GoogleAuthProvider();
+
 export const useUserStore = defineStore('user', () => {
   const userLoggedIn = ref(false);
 
@@ -28,8 +32,11 @@ export const useUserStore = defineStore('user', () => {
       values.password
     );
     userLoggedIn.value = true;
-
-    console.log(user);
+  }
+  //google login
+  async function googleAuthenticate() {
+    await signInWithPopup(auth, provider);
+    userLoggedIn.value = true;
   }
 
   //register
@@ -68,5 +75,6 @@ export const useUserStore = defineStore('user', () => {
     setIsLoggedIn,
     authenticate,
     signOutProfile,
+    googleAuthenticate,
   };
 });

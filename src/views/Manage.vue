@@ -35,7 +35,7 @@ import Upload from '@/components/Upload.vue';
 import { collection, query, where, getDocs } from 'firebase/firestore/lite';
 import { auth, db } from '@/utils/firestoreConfig';
 
-import SongItem from '@/components/SongItem.vue';
+import SongItem from '@/components/ManageSong.vue';
 export default {
   name: 'manage',
   data() {

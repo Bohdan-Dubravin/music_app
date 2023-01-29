@@ -41,7 +41,27 @@
             placeholder="Enter Genre"
             @input="updateUnsavedFlag(true)"
           />
-          <ErrorMessage class="text-red-600" name="genre" />
+          <ErrorMessage class="block text-red-600" name="genre" />
+
+          <input
+            v-if="!songImage"
+            type="file"
+            name="file"
+            id="fileInput"
+            class="hidden-input"
+            @change="addImg"
+            ref="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+          />
+
+          <div class="w-[200px] h-[200px]">
+            <img
+              v-if="songImage"
+              :src="songImage"
+              alt="songImage"
+              class="w-full h-full object-cover object-center"
+            />
+          </div>
         </div>
         <button
           type="submit"
@@ -64,7 +84,12 @@
 import { songSchema } from '@/utils/validation';
 import { deleteDoc, doc, updateDoc } from 'firebase/firestore/lite';
 import { db, storage } from '@/utils/firestoreConfig';
-import { deleteObject, ref } from '@firebase/storage';
+import {
+  deleteObject,
+  ref,
+  uploadBytesResumable,
+  getDownloadURL,
+} from '@firebase/storage';
 export default {
   name: 'SongItem',
   props: {
@@ -89,19 +114,46 @@ export default {
     return {
       songSchema,
       showForm: false,
+      songImage: null,
+      imageData: null,
     };
   },
   methods: {
+    addImg(event) {
+      this.imageData = event.target.files[0];
+
+      let input = this.$refs.file;
+      let file = input.files;
+      if (file && file[0]) {
+        let reader = new FileReader();
+        reader.onload = (e) => {
+          this.songImage = e.target.result;
+        };
+        reader.readAsDataURL(file[0]);
+      }
+    },
+
     async editSong(values) {
+      const newValues = values;
+
       try {
+        if (this.songImage) {
+          const storageRef = ref(storage, `images/${this.imageData.name}`);
+          const uploadTask = await uploadBytesResumable(
+            storageRef,
+            this.imageData
+          );
+          newValues.songImage = await getDownloadURL(storageRef);
+        }
+
         const songRef = doc(db, 'songs', this.song.songId);
-        await updateDoc(songRef, values);
+        await updateDoc(songRef, newValues);
       } catch (error) {
         console.log(error);
         return;
       }
 
-      this.updateSong(this.index, values);
+      this.updateSong(this.index, newValues);
       this.showForm = false;
       this.updateUnsavedFlag(false);
     },
