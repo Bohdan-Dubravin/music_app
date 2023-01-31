@@ -1,12 +1,13 @@
 <template lang="">
   <main>
     <!-- Music Header -->
-    <section class="w-full mb-8 py-14 text-center text-white relative">
-      <div
-        class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
-        style="background-image: url(/assets/img/song-header.png)"
-      ></div>
-      <div class="container mx-auto flex items-center">
+    <section class="max-w-[1216px] flex mx-auto mb-8 py-14">
+      <img
+        class="w-[416px] h-[416px] rounded-[10px] mr-[80px]"
+        :src="song.songImage"
+        alt="song-image"
+      />
+      <div class="flex items-center">
         <!-- Play/Pause Button -->
         <button
           @click.prevent="newSong(song)"
@@ -104,6 +105,7 @@ import {
 import { commentSchema } from '@/utils/validation'
 import { mapState, mapActions } from 'pinia'
 import { useUserStore } from '@/stores/user'
+import { useImageStore } from '@/stores/bgImage'
 import { usePlayerStore } from '@/stores/player'
 
 export default {
@@ -142,6 +144,7 @@ export default {
   },
   methods: {
     ...mapActions(usePlayerStore, ['newSong']),
+    ...mapActions(useImageStore, ['changeImage']),
     async addComment(values, actions) {
       try {
         const comment = {
@@ -178,7 +181,6 @@ export default {
       })
     },
   },
-
   computed: {
     ...mapState(useUserStore, ['userLoggedIn', 'playing']),
     ...mapState(usePlayerStore, ['playing']),
@@ -192,9 +194,11 @@ export default {
       })
     },
   },
+  mounted() {
+    this.changeImage(this.song.songImage)
+  },
   watch: {
     sortOrder(newVal) {
-      console.log(newVal)
       this.$router.push({ query: { sort: newVal } })
     },
   },
