@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,700;1,400;1,500&display=swap');
 a {
   transition: all 0.15s ease;
 }
@@ -81,6 +82,7 @@ input[type='file'] {
 body {
   overflow-x: hidden;
   background-color: rgb(14, 14, 14) !important;
+  font-family: 'DM Sans', sans-serif !important;
 }
 
 .gridItems {
