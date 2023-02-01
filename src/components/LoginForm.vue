@@ -43,17 +43,17 @@
   </button>
 </template>
 <script>
-import { loginSchema } from '../utils/validation';
-import { mapActions } from 'pinia';
-import { useUserStore } from '@/stores/user';
-import { useModalStore } from '@/stores/modal';
+import { loginSchema } from '../utils/validation'
+import { mapActions } from 'pinia'
+import { useUserStore } from '@/stores/user'
+import { useModalStore } from '@/stores/modal'
 
 export default {
   name: 'LoginComponent',
   data() {
     return {
       loginSchema,
-    };
+    }
   },
 
   methods: {
@@ -61,21 +61,21 @@ export default {
     ...mapActions(useModalStore, ['toggleIsOpen']),
     async login(values) {
       try {
-        await this.authenticate(values);
-        this.toggleIsOpen();
+        await this.authenticate(values)
+        this.toggleIsOpen()
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
     async googleLogin() {
       try {
-        await this.googleAuthenticate();
-        this.toggleIsOpen();
+        await this.googleAuthenticate()
+        this.toggleIsOpen()
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
   },
-};
+}
 </script>
 <style></style>

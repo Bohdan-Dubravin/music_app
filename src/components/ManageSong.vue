@@ -1,7 +1,9 @@
 <template>
-  <div class="border border-gray-200 p-3 mb-4 rounded">
+  <div class="border border-zinc-700 p-3 mb-4 rounded-lg">
     <div v-if="!showForm">
-      <h4 class="inline-block text-lg font-bold">{{ song.modifiedName }}</h4>
+      <h4 class="inline-block text-lg font-bold text-gray-200">
+        {{ song.modifiedName }}
+      </h4>
       <button
         class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
         @click.prevent="deleteSong"
@@ -22,18 +24,18 @@
         :initial-values="song"
       >
         <div class="mb-3">
-          <label class="inline-block mb-2">Song Title</label>
+          <label class="inline-block mb-2 text-zinc-500">Song Title</label>
           <vee-field
             type="text"
             name="modifiedName"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            class="block w-full py-1.5 px-3 text-zinc-400 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Enter Song Title"
             @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="text-red-600" name="modifiedName" />
         </div>
         <div class="mb-3">
-          <label class="inline-block mb-2">Genre</label>
+          <label class="inline-block mb-2 text-zinc-500">Genre</label>
           <vee-field
             type="text"
             name="genre"
@@ -81,15 +83,15 @@
   </div>
 </template>
 <script>
-import { songSchema } from '@/utils/validation';
-import { deleteDoc, doc, updateDoc } from 'firebase/firestore/lite';
-import { db, storage } from '@/utils/firestoreConfig';
+import { songSchema } from '@/utils/validation'
+import { deleteDoc, doc, updateDoc } from 'firebase/firestore/lite'
+import { db, storage } from '@/utils/firestoreConfig'
 import {
   deleteObject,
   ref,
   uploadBytesResumable,
   getDownloadURL,
-} from '@firebase/storage';
+} from '@firebase/storage'
 export default {
   name: 'SongItem',
   props: {
@@ -116,60 +118,60 @@ export default {
       showForm: false,
       songImage: null,
       imageData: null,
-    };
+    }
   },
   methods: {
     addImg(event) {
-      this.imageData = event.target.files[0];
+      this.imageData = event.target.files[0]
 
-      let input = this.$refs.file;
-      let file = input.files;
+      let input = this.$refs.file
+      let file = input.files
       if (file && file[0]) {
-        let reader = new FileReader();
+        let reader = new FileReader()
         reader.onload = (e) => {
-          this.songImage = e.target.result;
-        };
-        reader.readAsDataURL(file[0]);
+          this.songImage = e.target.result
+        }
+        reader.readAsDataURL(file[0])
       }
     },
 
     async editSong(values) {
-      const newValues = values;
+      const newValues = values
 
       try {
         if (this.songImage) {
-          const storageRef = ref(storage, `images/${this.imageData.name}`);
+          const storageRef = ref(storage, `images/${this.imageData.name}`)
           const uploadTask = await uploadBytesResumable(
             storageRef,
             this.imageData
-          );
-          newValues.songImage = await getDownloadURL(storageRef);
+          )
+          newValues.songImage = await getDownloadURL(storageRef)
         }
 
-        const songRef = doc(db, 'songs', this.song.songId);
-        await updateDoc(songRef, newValues);
+        const songRef = doc(db, 'songs', this.song.songId)
+        await updateDoc(songRef, newValues)
       } catch (error) {
-        console.log(error);
-        return;
+        console.log(error)
+        return
       }
 
-      this.updateSong(this.index, newValues);
-      this.showForm = false;
-      this.updateUnsavedFlag(false);
+      this.updateSong(this.index, newValues)
+      this.showForm = false
+      this.updateUnsavedFlag(false)
     },
     async deleteSong() {
       try {
-        const storageRef = ref(storage, `songs/${this.song.originalName}`);
-        await deleteObject(storageRef);
+        const storageRef = ref(storage, `songs/${this.song.originalName}`)
+        await deleteObject(storageRef)
 
-        await deleteDoc(doc(db, 'songs', this.song.songId));
+        await deleteDoc(doc(db, 'songs', this.song.songId))
 
-        this.$emit('deleteSong', this.song.songId);
+        this.$emit('deleteSong', this.song.songId)
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     },
   },
-};
+}
 </script>
 <style lang=""></style>

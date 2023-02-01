@@ -36,7 +36,7 @@
 
           <!-- Tabs -->
           <ul class="flex flex-wrap mb-4">
-            <li class="flex-auto text-center">
+            <li class="flex-auto text-center first:mr-3">
               <a
                 class="block rounded py-3 px-4 transition"
                 :class="{
@@ -73,22 +73,22 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue';
-import { useModalStore } from '@/stores/modal';
-import { useUserStore } from '@/stores/user';
-import LoginForm from '@/components/LoginForm.vue';
-import RegisterForm from '@/components/RegisterForm.vue';
+import { ref } from 'vue'
+import { useModalStore } from '@/stores/modal'
+import { useUserStore } from '@/stores/user'
+import LoginForm from '@/components/LoginForm.vue'
+import RegisterForm from '@/components/RegisterForm.vue'
 
 export default {
   name: 'Auth',
   components: { LoginForm, RegisterForm },
   setup() {
-    const store = useModalStore();
-    const user = useUserStore();
-    const tab = ref('login');
+    const store = useModalStore()
+    const user = useUserStore()
+    const tab = ref('login')
 
     function changeTab(tabName) {
-      tab.value = tabName;
+      tab.value = tabName
     }
 
     return {
@@ -96,8 +96,8 @@ export default {
       tab,
       changeTab,
       user,
-    };
+    }
   },
-};
+}
 </script>
 <style></style>

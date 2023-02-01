@@ -1,5 +1,5 @@
 <template>
-  <header id="header" class="bg-[rgba(18,18,18,0.7)] z-20">
+  <header id="header" class="bg-[rgba(18,18,18,0.8)] z-20">
     <nav class="container mx-auto flex justify-start items-center py-5 px-4">
       <!-- App Name -->
       <router-link
@@ -37,33 +37,33 @@
   </header>
 </template>
 <script>
-import { useModalStore } from '@/stores/modal';
-import { useUserStore } from '@/stores/user';
-import { useRouter, useRoute } from 'vue-router';
+import { useModalStore } from '@/stores/modal'
+import { useUserStore } from '@/stores/user'
+import { useRouter, useRoute } from 'vue-router'
 export default {
   name: 'Header',
   setup() {
-    const modalStore = useModalStore();
-    const userStore = useUserStore();
-    const router = useRouter();
-    const route = useRoute();
+    const modalStore = useModalStore()
+    const userStore = useUserStore()
+    const router = useRouter()
+    const route = useRoute()
     function toggleAuthModal() {
-      modalStore.toggleIsOpen();
+      modalStore.toggleIsOpen()
     }
 
     async function signOut() {
       try {
-        await userStore.signOutProfile();
-        console.log(route);
+        await userStore.signOutProfile()
+        console.log(route)
         if (route.meta.requiresAuth) {
-          router.push('/');
+          router.push('/')
         }
       } catch (error) {
-        console.log(error);
+        console.log(error)
       }
     }
-    return { toggleAuthModal, userStore, signOut };
+    return { toggleAuthModal, userStore, signOut }
   },
-};
+}
 </script>
 <style></style>

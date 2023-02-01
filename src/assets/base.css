@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  .main-btn {
+    @apply hover:bg-[rgba(214,180,241,0.12)] hover:text-[#cb8ffc] rounded   font-bold text-[#d6a4ff] bg-[rgba(214,164,255,0.12)] transition-colors;
+  }
+  /* ... */
+}
