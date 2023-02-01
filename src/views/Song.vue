@@ -16,7 +16,10 @@
         >
           <i
             class="fa"
-            :class="{ 'fa-play': !playing, 'fa-pause': playing }"
+            :class="{
+              'fa-play': !playing || !currentSong.url === song.url,
+              'fa-pause': playing && currentSong.url === song.url,
+            }"
           ></i>
         </button>
         <div class="z-50 text-left ml-8">
@@ -92,7 +95,7 @@
   </main>
 </template>
 <script>
-import { db, auth, commentsCollection } from '@/utils/firestoreConfig'
+import { db, auth, commentsCollection } from '@/utils/firestoreConfig';
 import {
   doc,
   getDoc,
@@ -101,12 +104,12 @@ import {
   getDocs,
   query,
   where,
-} from 'firebase/firestore/lite'
-import { commentSchema } from '@/utils/validation'
-import { mapState, mapActions } from 'pinia'
-import { useUserStore } from '@/stores/user'
-import { useImageStore } from '@/stores/bgImage'
-import { usePlayerStore } from '@/stores/player'
+} from 'firebase/firestore/lite';
+import { commentSchema } from '@/utils/validation';
+import { mapState, mapActions } from 'pinia';
+import { useUserStore } from '@/stores/user';
+import { useImageStore } from '@/stores/bgImage';
+import { usePlayerStore } from '@/stores/player';
 
 export default {
   name: 'Song',
@@ -118,28 +121,30 @@ export default {
       isError: false,
       comments: [],
       sortOrder: 'desc',
-    }
+    };
   },
   async created() {
     try {
-      const docRef = doc(db, 'songs', this.$route.params.id)
-      const docSnap = await getDoc(docRef)
+      const docRef = doc(db, 'songs', this.$route.params.id);
+      const docSnap = await getDoc(docRef);
 
       if (!docSnap.exists()) {
-        this.$router.push('/')
-        return
+        this.$router.push('/');
+        return;
       }
 
-      this.song = docSnap.data()
-      await this.getComments()
+      this.song = docSnap.data();
+      console.log(this.song);
+      this.changeImage(this.song.songImage);
+      await this.getComments();
     } catch (error) {
-      console.log(error)
+      console.log(error);
     }
 
-    const { sort } = this.$route.query
+    const { sort } = this.$route.query;
 
     if (sort === 'asc' || sort === 'desc') {
-      this.sortOrder = sort
+      this.sortOrder = sort;
     }
   },
   methods: {
@@ -153,14 +158,14 @@ export default {
           songId: this.$route.params.id,
           author: auth.currentUser.displayName,
           uid: auth.currentUser.uid,
-        }
+        };
 
-        await addDoc(commentsCollection, comment)
+        await addDoc(commentsCollection, comment);
 
-        actions.resetForm()
-        await this.getComments()
+        actions.resetForm();
+        await this.getComments();
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
 
@@ -168,40 +173,38 @@ export default {
       const nextQuery = query(
         commentsCollection,
         where('songId', '==', this.$route.params.id)
-      )
+      );
 
-      const snapshots = await getDocs(nextQuery)
-      this.comments = []
+      const snapshots = await getDocs(nextQuery);
+      this.comments = [];
       snapshots.forEach((snap) => {
         this.comments.push({
           ...snap.data(),
           datePosted: snap.data().datePosted.toDate(),
           docId: snap.id,
-        })
-      })
+        });
+      });
     },
   },
   computed: {
     ...mapState(useUserStore, ['userLoggedIn', 'playing']),
-    ...mapState(usePlayerStore, ['playing']),
+    ...mapState(usePlayerStore, ['playing', 'currentSong']),
     sortedComments() {
       return [...this.comments].sort((a, b) => {
         if (this.sortOrder === 'desc') {
-          return new Date(b.datePosted) - new Date(a.datePosted)
+          return new Date(b.datePosted) - new Date(a.datePosted);
         } else {
-          return new Date(a.datePosted) - new Date(b.datePosted)
+          return new Date(a.datePosted) - new Date(b.datePosted);
         }
-      })
+      });
     },
   },
-  mounted() {
-    this.changeImage(this.song.songImage)
-  },
+
   watch: {
     sortOrder(newVal) {
-      this.$router.push({ query: { sort: newVal } })
+      this.$router.push({ query: { sort: newVal } });
     },
   },
-}
+};
 </script>
 <style></style>
