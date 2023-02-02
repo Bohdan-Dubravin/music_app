@@ -8,7 +8,7 @@
     />
     <img
       class="absolute opacity-0 delay-200 top-0 transition-all duration-[1000ms] object-cover w-[100%] max-h-[500px]"
-      :src="secondImageUrl"
+      :src="secondImageUrl || '/assets/img/OqH4GUk.jpeg'"
       :class="{ 'opacity-100': currentImg === 0 }"
       alt="bg-img"
     />
@@ -26,13 +26,13 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue';
-import Auth from '@/components/Auth.vue';
-import { mapActions, mapState } from 'pinia';
-import { auth } from '@/utils/firestoreConfig';
-import { useUserStore } from '@/stores/user';
-import { useImageStore } from '@/stores/bgImage';
-import Player from './components/Player.vue';
+import Header from '@/components/Header.vue'
+import Auth from '@/components/Auth.vue'
+import { mapActions, mapState } from 'pinia'
+import { auth } from '@/utils/firestoreConfig'
+import { useUserStore } from '@/stores/user'
+import { useImageStore } from '@/stores/bgImage'
+import Player from './components/Player.vue'
 
 export default {
   name: 'App',
@@ -53,17 +53,17 @@ export default {
   },
   created() {
     if (auth.currentUser) {
-      this.setIsLoggedIn();
+      this.setIsLoggedIn()
     }
   },
   watch: {
     $route(to, from) {
-      const toDepth = to.path.split('/').length;
-      const fromDepth = from.path.split('/').length;
-      this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
+      const toDepth = to.path.split('/').length
+      const fromDepth = from.path.split('/').length
+      this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
     },
   },
-};
+}
 </script>
 
 <style>

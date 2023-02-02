@@ -16,9 +16,10 @@
         />
       </div>
       <img
-        :src="song.songImage"
+        :src="song.songImage || '/assets/img/no-image.png'"
         alt="songImage"
         class="w-full [h-200px] object-cover rounded-md"
+        :class="{ 'object-scale-down border border-zinc-500': !song.songImage }"
       />
     </div>
     <div>
@@ -49,9 +50,9 @@
   </li>
 </template>
 <script>
-import { mapActions } from 'pinia';
-import { usePlayerStore } from '@/stores/player';
-import { useImageStore } from '@/stores/bgImage';
+import { mapActions } from 'pinia'
+import { usePlayerStore } from '@/stores/player'
+import { useImageStore } from '@/stores/bgImage'
 
 export default {
   props: {
@@ -64,10 +65,10 @@ export default {
     ...mapActions(usePlayerStore, ['newSong']),
     ...mapActions(useImageStore, ['changeImage']),
     playSong() {
-      this.newSong(this.song);
-      this.changeImage(this.song.songImage);
+      this.newSong(this.song)
+      this.changeImage(this.song.songImage)
     },
   },
-};
+}
 </script>
 <style></style>

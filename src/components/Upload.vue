@@ -9,7 +9,7 @@
         <!-- Upload Dropbox -->
 
         <div
-          @click="upload($event)"
+          @click.prevent="$refs.file.click()"
           class="w-full px-10 py-20 rounded text-center cursor-pointer border border-dashed border-gray-400 text-gray-400 transition duration-500 hover:text-white hover:bg-green-400 hover:border-green-400 hover:border-solid"
           :class="{
             'bg-green-400 border-green-400 border-solid': is_dragover,
@@ -22,9 +22,9 @@
           @dragleave.prevent.stop="is_dragover = false"
           @drop.prevent.stop="upload($event)"
         >
-          <h5>Drop your files here</h5>
+          <h5>Drop your files here or click</h5>
         </div>
-        <input class="" type="file" @change="upload($event)" />
+        <input class="hidden" ref="file" type="file" @change="upload($event)" />
 
         <hr class="my-6" />
         <!-- Progess Bars -->

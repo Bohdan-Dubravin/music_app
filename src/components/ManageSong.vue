@@ -5,13 +5,13 @@
         {{ song.modifiedName }}
       </h4>
       <button
-        class="ml-1 py-1 px-2 text-sm rounded text-white bg-red-600 float-right"
+        class="ml-1 py-1 px-2 text-sm rounded text-white bg-[rgba(248,66,66,0.52)] float-right"
         @click.prevent="deleteSong"
       >
         <i class="fa fa-times"></i>
       </button>
       <button
-        class="ml-1 py-1 px-2 text-sm rounded text-white bg-blue-600 float-right"
+        class="ml-1 py-1 px-2 text-sm rounded text-white bg-[rgba(66,84,248,0.52)] float-right"
         @click.prevent="showForm = !showForm"
       >
         <i class="fa fa-pencil-alt"></i>
@@ -28,7 +28,7 @@
           <vee-field
             type="text"
             name="modifiedName"
-            class="block w-full py-1.5 px-3 text-zinc-400 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            class="block bg-gray-700 w-full border border-transparent py-1.5 px-3 text-white transition duration-500 focus:outline-none focus:border-gray-300 rounded"
             placeholder="Enter Song Title"
             @input="updateUnsavedFlag(true)"
           />
@@ -39,7 +39,7 @@
           <vee-field
             type="text"
             name="genre"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            class="block bg-gray-700 w-full border border-transparent py-1.5 px-3 text-white transition duration-500 focus:outline-none focus:border-gray-300 rounded"
             placeholder="Enter Genre"
             @input="updateUnsavedFlag(true)"
           />
@@ -65,15 +65,10 @@
             />
           </div>
         </div>
-        <button
-          type="submit"
-          class="py-1.5 px-3 rounded text-white bg-green-600"
-        >
-          Submit
-        </button>
+        <button type="submit" class="py-1.5 px-3 main-btn">Submit</button>
         <button
           type="button"
-          class="py-1.5 px-3 rounded text-white bg-gray-600"
+          class="py-1.5 px-3 rounded bg-[rgba(248,66,66,0.52)] text-white ml-2"
           @click.prevent="showForm = !showForm"
         >
           Go Back
