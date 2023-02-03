@@ -1,6 +1,6 @@
 <template>
   <div class="col-span-1">
-    <div class="bg-zinc-900 rounded-xl relative flex flex-col">
+    <div class="bg-zinc-800 rounded-xl relative flex flex-col">
       <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-800">
         <span class="card-title text-gray-200">Upload</span>
         <i class="fas fa-upload float-right text-green-400 text-2xl"></i>
@@ -48,9 +48,9 @@
   </div>
 </template>
 <script>
-import { storage, auth, db } from '@/utils/firestoreConfig'
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage'
-import { addDoc, Timestamp, collection } from 'firebase/firestore/lite'
+import { storage, auth, db } from '@/utils/firestoreConfig';
+import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { addDoc, Timestamp, collection } from 'firebase/firestore/lite';
 export default {
   name: 'Upload',
   props: ['addSong'],
@@ -58,24 +58,24 @@ export default {
     return {
       is_dragover: false,
       uploads: [],
-    }
+    };
   },
   methods: {
     upload($event) {
-      this.is_dragover = false
+      this.is_dragover = false;
 
       const files = $event.dataTransfer
         ? [...$event.dataTransfer.files]
-        : [...$event.target.files]
+        : [...$event.target.files];
 
       files.forEach((file) => {
-        const fileType = file.type
+        const fileType = file.type;
         if (!/(audio)/g.test(fileType)) {
-          return
+          return;
         }
 
-        const storageRef = ref(storage, `songs/${file.name}`)
-        const uploadTask = uploadBytesResumable(storageRef, file)
+        const storageRef = ref(storage, `songs/${file.name}`);
+        const uploadTask = uploadBytesResumable(storageRef, file);
 
         const uploadIndex =
           this.uploads.push({
@@ -85,20 +85,20 @@ export default {
             variant: 'bg-blue-400',
             icon: 'fas fa-spinner fa-spin',
             text_class: '',
-          }) - 1
+          }) - 1;
 
         uploadTask.on(
           'state_changed',
           (snapshot) => {
             const progress =
-              (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-            this.uploads[uploadIndex].currentProgress = progress
+              (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+            this.uploads[uploadIndex].currentProgress = progress;
           },
           (error) => {
-            this.uploads[uploadIndex].variant = 'bg-red-400'
-            this.uploads[uploadIndex].icon = 'fas fa-times'
-            this.uploads[uploadIndex].text = 'text-red-400'
-            console.log(error)
+            this.uploads[uploadIndex].variant = 'bg-red-400';
+            this.uploads[uploadIndex].icon = 'fas fa-times';
+            this.uploads[uploadIndex].text = 'text-red-400';
+            console.log(error);
           },
           async () => {
             const song = {
@@ -108,28 +108,28 @@ export default {
               modifiedName: uploadTask.snapshot.ref.name,
               genre: '',
               comment_count: 0,
-            }
+            };
 
-            song.url = await getDownloadURL(storageRef)
+            song.url = await getDownloadURL(storageRef);
 
-            const docRef = collection(db, 'songs')
-            await addDoc(docRef, song)
+            const docRef = collection(db, 'songs');
+            await addDoc(docRef, song);
 
-            this.addSong(song)
+            this.addSong(song);
 
-            this.uploads[uploadIndex].variant = 'bg-green-400'
-            this.uploads[uploadIndex].icon = 'fas fa-check'
-            this.uploads[uploadIndex].text_class = 'text-green-400'
+            this.uploads[uploadIndex].variant = 'bg-green-400';
+            this.uploads[uploadIndex].icon = 'fas fa-check';
+            this.uploads[uploadIndex].text_class = 'text-green-400';
           }
-        )
-      })
+        );
+      });
     },
   },
   beforeUnmount() {
     this.uploads.forEach((upload) => {
-      upload.uploadTask.cancel()
-    })
+      upload.uploadTask.cancel();
+    });
   },
-}
+};
 </script>
 <style></style>

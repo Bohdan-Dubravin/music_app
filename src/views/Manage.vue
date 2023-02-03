@@ -1,9 +1,12 @@
 <template>
   <section class="container mx-auto mt-6">
+    <h1 class="uppercase font-bold text-5xl mb-10 text-white max-w-[500px]">
+      Manage and upload songs the way you want
+    </h1>
     <div class="grid md:grid md:grid-cols-3 md:gap-4">
       <Upload :addSong="addSong" />
       <div class="col-span-2">
-        <div class="bg-zinc-900 rounded-xl relative flex flex-col">
+        <div class="bg-zinc-800 rounded-xl relative flex flex-col">
           <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
             <span class="card-title text-gray-200">My Songs</span>
             <i
@@ -28,61 +31,61 @@
   </section>
 </template>
 <script>
-import { useUserStore } from '@/stores/user'
-import Upload from '@/components/Upload.vue'
-import { collection, query, where, getDocs } from 'firebase/firestore/lite'
-import { auth, db } from '@/utils/firestoreConfig'
+import { useUserStore } from '@/stores/user';
+import Upload from '@/components/Upload.vue';
+import { collection, query, where, getDocs } from 'firebase/firestore/lite';
+import { auth, db } from '@/utils/firestoreConfig';
 
-import SongItem from '@/components/ManageSong.vue'
+import SongItem from '@/components/ManageSong.vue';
 export default {
   name: 'manage',
   data() {
-    return { songs: [], unsavedFlag: false }
+    return { songs: [], unsavedFlag: false };
   },
   async mounted() {
     const q = query(
       collection(db, 'songs'),
       where('uid', '==', auth.currentUser.uid)
-    )
-    const querySnapshot = await getDocs(q)
+    );
+    const querySnapshot = await getDocs(q);
     querySnapshot.forEach((song) => {
-      this.songs.push({ ...song.data(), songId: song.id })
-    })
+      this.songs.push({ ...song.data(), songId: song.id });
+    });
   },
   methods: {
     updateSong(i, values) {
-      this.songs[i].modifiedName = values.modifiedName
-      this.songs[i].genre = values.genre
+      this.songs[i].modifiedName = values.modifiedName;
+      this.songs[i].genre = values.genre;
     },
     deleteSong(songId) {
-      console.log(songId)
-      this.songs = this.songs.filter((song) => song.songId !== songId)
+      console.log(songId);
+      this.songs = this.songs.filter((song) => song.songId !== songId);
     },
 
     addSong(song) {
-      this.songs.push(song)
+      this.songs.push(song);
     },
     updateUnsavedFlag(value) {
-      this.unsavedFlag = value
+      this.unsavedFlag = value;
     },
   },
   components: { Upload, SongItem },
   beforeRouteEnter(to, from, next) {
-    const userStore = useUserStore()
+    const userStore = useUserStore();
     if (userStore.userLoggedIn) {
-      next()
+      next();
     } else {
-      next('/')
+      next('/');
     }
   },
   beforeRouteLeave(to, from, next) {
     if (!this.updateUnsavedFlag) {
-      next()
+      next();
     } else {
-      const leave = confirm('You have unsaved changes. Do yo want to leave?')
-      next(leave)
+      const leave = confirm('You have unsaved changes. Do yo want to leave?');
+      next(leave);
     }
   },
-}
+};
 </script>
 <style></style>
