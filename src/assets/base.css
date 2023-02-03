@@ -4,7 +4,7 @@
 
 @layer base {
   .main-btn {
-    @apply hover:bg-[rgba(214,180,241,0.12)] hover:text-[#cb8ffc] rounded   font-bold text-[#d6a4ff] bg-[rgba(214,164,255,0.12)] transition-colors;
+    @apply hover:bg-[rgba(130,32,211,0.7)] hover:text-[#f0e0fd] rounded   font-bold text-[#d6a4ff] bg-[rgba(214,164,255,0.12)] transition-all duration-300;
   }
   /* ... */
 }

@@ -1,5 +1,8 @@
 <template>
-  <div class="border border-zinc-700 p-3 mb-4 rounded-lg">
+  <div
+    class="border border-zinc-700 p-3 mb-4 rounded-lg transition-all h-[55px]"
+    :class="{ '!h-[500px]': showForm }"
+  >
     <div v-if="!showForm">
       <h4 class="inline-block text-lg font-bold text-gray-200">
         {{ song.modifiedName }}
@@ -44,13 +47,15 @@
             @input="updateUnsavedFlag(true)"
           />
           <ErrorMessage class="block text-red-600" name="genre" />
-
+          <button @click.prevent="$refs.file.click()" class="main-btn p-2 my-4">
+            Upload new song Image
+          </button>
           <input
             v-if="!songImage"
             type="file"
             name="file"
             id="fileInput"
-            class="hidden-input"
+            class="hidden"
             @change="addImg"
             ref="file"
             accept=".pdf,.jpg,.jpeg,.png"
@@ -58,10 +63,9 @@
 
           <div class="w-[200px] h-[200px]">
             <img
-              v-if="songImage"
-              :src="songImage"
+              :src="songImage || song.songImage || '/assets/img/main-icon.svg'"
               alt="songImage"
-              class="w-full h-full object-cover object-center"
+              class="w-full h-full object-cover object-center rounded-lg border border-zinc-400"
             />
           </div>
         </div>

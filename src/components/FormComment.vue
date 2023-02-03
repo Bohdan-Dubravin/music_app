@@ -19,9 +19,15 @@
   </div>
 </template>
 <script>
-import { Timestamp, addDoc } from 'firebase/firestore/lite'
+import {
+  Timestamp,
+  addDoc,
+  updateDoc,
+  increment,
+  doc,
+} from 'firebase/firestore/lite'
 import { commentSchema } from '@/utils/validation'
-import { auth, commentsCollection } from '@/utils/firestoreConfig'
+import { auth, commentsCollection, db } from '@/utils/firestoreConfig'
 export default {
   name: 'FormComment',
 
@@ -34,6 +40,10 @@ export default {
   props: {
     getComments: {
       type: Function,
+      required: true,
+    },
+    songId: {
+      type: String,
       required: true,
     },
   },
@@ -49,7 +59,8 @@ export default {
         }
 
         await addDoc(commentsCollection, comment)
-
+        const songRef = doc(db, 'songs', this.songId)
+        await updateDoc(songRef, { comment_count: increment(1) })
         actions.resetForm()
         await this.getComments()
       } catch (error) {

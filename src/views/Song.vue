@@ -37,7 +37,11 @@
               <p class="text-gray-200 italic">{{ song.genre }}</p>
             </div>
           </div>
-          <FormComment :getComments="getComments" v-if="userLoggedIn" />
+          <FormComment
+            :songId="song.songId"
+            :getComments="getComments"
+            v-if="userLoggedIn"
+          />
 
           <h2
             v-else
@@ -85,15 +89,15 @@
   </main>
 </template>
 <script>
-import { db, commentsCollection } from '@/utils/firestoreConfig';
-import { doc, getDoc, getDocs, query, where } from 'firebase/firestore/lite';
-import { commentSchema } from '@/utils/validation';
-import { mapState, mapActions } from 'pinia';
-import { useUserStore } from '@/stores/user';
-import FormComment from '@/components/FormComment.vue';
-import { useImageStore } from '@/stores/bgImage';
-import { usePlayerStore } from '@/stores/player';
-import { useModalStore } from '@/stores/modal';
+import { db, commentsCollection } from '@/utils/firestoreConfig'
+import { doc, getDoc, getDocs, query, where } from 'firebase/firestore/lite'
+import { commentSchema } from '@/utils/validation'
+import { mapState, mapActions } from 'pinia'
+import { useUserStore } from '@/stores/user'
+import FormComment from '@/components/FormComment.vue'
+import { useImageStore } from '@/stores/bgImage'
+import { usePlayerStore } from '@/stores/player'
+import { useModalStore } from '@/stores/modal'
 
 export default {
   name: 'Song',
@@ -105,30 +109,31 @@ export default {
       isError: false,
       comments: [],
       sortOrder: 'desc',
-    };
+    }
   },
   async created() {
     try {
-      const docRef = doc(db, 'songs', this.$route.params.id);
-      const docSnap = await getDoc(docRef);
+      const docRef = doc(db, 'songs', this.$route.params.id)
+      const docSnap = await getDoc(docRef)
 
       if (!docSnap.exists()) {
-        this.$router.push('/');
-        return;
+        this.$router.push('/')
+        return
       }
 
-      this.song = docSnap.data();
+      this.song = docSnap.data()
+      console.log(this.song)
+      this.changeImage(this.song.songImage)
 
-      this.changeImage(this.song.songImage);
-      await this.getComments();
+      await this.getComments()
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
 
-    const { sort } = this.$route.query;
+    const { sort } = this.$route.query
 
     if (sort === 'asc' || sort === 'desc') {
-      this.sortOrder = sort;
+      this.sortOrder = sort
     }
   },
   methods: {
@@ -140,17 +145,17 @@ export default {
       const nextQuery = query(
         commentsCollection,
         where('songId', '==', this.$route.params.id)
-      );
+      )
 
-      const snapshots = await getDocs(nextQuery);
-      this.comments = [];
+      const snapshots = await getDocs(nextQuery)
+      this.comments = []
       snapshots.forEach((snap) => {
         this.comments.push({
           ...snap.data(),
           datePosted: snap.data().datePosted.toDate().toLocaleTimeString(),
           docId: snap.id,
-        });
-      });
+        })
+      })
     },
   },
   computed: {
@@ -159,19 +164,19 @@ export default {
     sortedComments() {
       return [...this.comments].sort((a, b) => {
         if (this.sortOrder === 'desc') {
-          return new Date(b.datePosted) - new Date(a.datePosted);
+          return new Date(b.datePosted) - new Date(a.datePosted)
         } else {
-          return new Date(a.datePosted) - new Date(b.datePosted);
+          return new Date(a.datePosted) - new Date(b.datePosted)
         }
-      });
+      })
     },
   },
 
   watch: {
     sortOrder(newVal) {
-      this.$router.push({ query: { sort: newVal } });
+      this.$router.push({ query: { sort: newVal } })
     },
   },
-};
+}
 </script>
 <style></style>
