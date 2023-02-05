@@ -18,7 +18,7 @@
         Music</router-link
       >
       <HamburgerMenuComponent />
-      <ul class="ml-auto flex lg:hidden">
+      <ul class="hidden ml-auto lg:flex">
         <li>
           <router-link class="p-2 mr-5 text-white font-bold text-lg" to="/about"
             >About</router-link

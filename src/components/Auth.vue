@@ -1,27 +1,22 @@
 <template>
   <div
     v-if="!user.userLoggedIn && store.isOpen"
-    class="fixed z-10 inset-0 overflow-y-auto"
+    class="fixed z-10 min-h-screen inset-0 overflow-y-auto flex align-middle items-center"
     :class="store.hiddenClass"
     id="modal"
   >
-    <div
-      class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
-    >
+    <div class="flex items-end justify-center mx-auto text-center">
       <div class="fixed inset-0 transition-opacity">
         <div class="absolute inset-0 bg-gray-800 opacity-75"></div>
       </div>
 
       <!-- This element is to trick the browser into centering the modal contents. -->
-      <span class="hidden sm:inline-block sm:align-middle sm:h-screen"
-        >&#8203;</span
-      >
 
       <div
-        class="inline-block align-bottom bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+        class="inline-block align-bottom min-w-[300px] md:min-w-[400px] bg-gray-900 rounded-lg text-left overflow-hidden shadow-xl transform transition-all"
       >
         <!-- Add margin if you want to see some of the overlay behind the modal-->
-        <div class="py-4 text-left px-6">
+        <div class="p-6 text-left">
           <!--Title-->
           <div class="flex justify-between items-center pb-4">
             <p class="text-2xl text-white font-bold">Your Account</p>
@@ -73,22 +68,22 @@
   </div>
 </template>
 <script>
-import { ref } from 'vue'
-import { useModalStore } from '@/stores/modal'
-import { useUserStore } from '@/stores/user'
-import LoginForm from '@/components/LoginForm.vue'
-import RegisterForm from '@/components/RegisterForm.vue'
+import { ref } from 'vue';
+import { useModalStore } from '@/stores/modal';
+import { useUserStore } from '@/stores/user';
+import LoginForm from '@/components/LoginForm.vue';
+import RegisterForm from '@/components/RegisterForm.vue';
 
 export default {
   name: 'Auth',
   components: { LoginForm, RegisterForm },
   setup() {
-    const store = useModalStore()
-    const user = useUserStore()
-    const tab = ref('login')
+    const store = useModalStore();
+    const user = useUserStore();
+    const tab = ref('login');
 
     function changeTab(tabName) {
-      tab.value = tabName
+      tab.value = tabName;
     }
 
     return {
@@ -96,8 +91,8 @@ export default {
       tab,
       changeTab,
       user,
-    }
+    };
   },
-}
+};
 </script>
 <style></style>

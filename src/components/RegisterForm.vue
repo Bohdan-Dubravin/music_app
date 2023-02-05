@@ -1,4 +1,4 @@
-<template lang="">
+<template>
   <!-- Registration Form -->
   <vee-form :validation-schema="registerSchema" @submit="register">
     <!-- Name -->

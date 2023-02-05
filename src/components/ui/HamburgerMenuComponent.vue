@@ -1,5 +1,5 @@
 <template>
-  <div class="hidden lg:block hamburger-wrapper" @click="toggleMenu">
+  <div class="block lg:hidden hamburger-wrapper" @click="toggleMenu">
     <div class="hamburger" :class="{ 'hamburger--closed': !isOpen }">
       <div
         class="hamburger__icon bg-white"
@@ -9,12 +9,10 @@
 
     <div class="menu-overlay" v-if="isOpen"></div>
     <div class="menu bg-zinc-900" :class="{ menu__open: isOpen }">
-      <nav
-        class="container mx-auto flex justify-start items-center max-w-[1154px]"
-      >
+      <nav class="container mx-auto max-w-[1154px]">
         <!-- App Name -->
         <router-link
-          class="text-white hover:text-white font- uppercase text-2xl mr-4 flex items-center"
+          class="text-white hover:text-white mb-6 uppercase text-2xl flex items-center"
           exact-active-class="no-active"
           to="/"
         >
@@ -28,9 +26,9 @@
         >
 
         <ul class="flex flex-col">
-          <li>
+          <li class="mb-4">
             <router-link
-              class="p-2 mr-5 text-white font-bold text-lg"
+              class="p-2 mr-5 mb-4 text-white font-bold text-lg"
               to="/about"
               >About</router-link
             >
@@ -44,7 +42,7 @@
             >
           </li>
           <template v-else="userLoggedIn">
-            <li>
+            <li class="mb-4">
               <router-link
                 class="p-2 mr-5 text-white font-bold text-lg"
                 to="/manage"
@@ -115,10 +113,11 @@ export default {
 }
 .hamburger {
   position: fixed;
-  top: 37px;
-  right: 40px;
-  z-index: 20;
+  top: 27px;
+  right: 30px;
+  z-index: 10;
 }
+
 .hamburger--closed {
   position: absolute;
 }
@@ -185,10 +184,11 @@ export default {
   z-index: 4;
   transform: translateY(-100%);
   transition: transform 0.5s ease;
-  padding: 120px;
+  padding: 30px;
+  padding-top: 60px;
 }
 .menu__open {
-  transform: translateY(-40%);
+  transform: translateY(0);
 }
 
 .menu__link {

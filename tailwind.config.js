@@ -6,13 +6,13 @@ module.exports = {
       display: ['group-hover'],
       visibility: ['group-hover'],
       screens: {
-        sm: { max: '576px' },
+        sm: { min: '576px' },
         // => @media (min-width: 576px) { ... }
 
-        md: { max: '960px' },
+        md: { min: '960px' },
         // => @media (min-width: 960px) { ... }
 
-        lg: { max: '1024px' },
+        lg: { min: '1024px' },
         // => @media (min-width: 1440px) { ... }
       },
     },
