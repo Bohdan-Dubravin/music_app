@@ -17,8 +17,8 @@
         />
         Music</router-link
       >
-
-      <ul class="ml-auto flex">
+      <HamburgerMenuComponent />
+      <ul class="ml-auto flex lg:hidden">
         <li>
           <router-link class="p-2 mr-5 text-white font-bold text-lg" to="/about"
             >About</router-link
@@ -54,33 +54,34 @@
   </header>
 </template>
 <script>
-import { useModalStore } from '@/stores/modal'
-import { useUserStore } from '@/stores/user'
-import { useRouter, useRoute } from 'vue-router'
+import { useModalStore } from '@/stores/modal';
+import { useUserStore } from '@/stores/user';
+import { useRouter, useRoute } from 'vue-router';
+import HamburgerMenuComponent from './ui/HamburgerMenuComponent.vue';
 export default {
   name: 'Header',
   setup() {
-    const modalStore = useModalStore()
-    const userStore = useUserStore()
-    const router = useRouter()
-    const route = useRoute()
+    const modalStore = useModalStore();
+    const userStore = useUserStore();
+    const router = useRouter();
+    const route = useRoute();
     function toggleAuthModal() {
-      modalStore.toggleIsOpen()
+      modalStore.toggleIsOpen();
     }
-
     async function signOut() {
       try {
-        await userStore.signOutProfile()
-        console.log(route)
+        await userStore.signOutProfile();
+        console.log(route);
         if (route.meta.requiresAuth) {
-          router.push('/')
+          router.push('/');
         }
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     }
-    return { toggleAuthModal, userStore, signOut }
+    return { toggleAuthModal, userStore, signOut };
   },
-}
+  components: { HamburgerMenuComponent },
+};
 </script>
 <style></style>

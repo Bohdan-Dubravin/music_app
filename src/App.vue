@@ -1,5 +1,5 @@
 <template>
-  <div class="absolute px-4 mx-auto -z-10 top-0 left-0 right-0 w-full">
+  <div class="absolute -z-10 top-0 w-full">
     <img
       class="absolute opacity-0 top-0 delay-200 transition-all duration-[1000ms] object-cover w-[100%] max-h-[500px]"
       :class="{ 'opacity-100': currentImg === 1 }"
@@ -13,7 +13,7 @@
       alt="bg-img"
     />
   </div>
-  <div class="backdrop-blur-xl pb-4">
+  <div class="backdrop-blur-xl pb-4 -z-20">
     <Header />
     <router-view v-slot="{ Component }">
       <transition name="route" mode="out-in">
@@ -26,13 +26,13 @@
 </template>
 
 <script>
-import Header from '@/components/Header.vue'
-import Auth from '@/components/Auth.vue'
-import { mapActions, mapState } from 'pinia'
-import { auth } from '@/utils/firestoreConfig'
-import { useUserStore } from '@/stores/user'
-import { useImageStore } from '@/stores/bgImage'
-import Player from './components/Player.vue'
+import Header from '@/components/Header.vue';
+import Auth from '@/components/Auth.vue';
+import { mapActions, mapState } from 'pinia';
+import { auth } from '@/utils/firestoreConfig';
+import { useUserStore } from '@/stores/user';
+import { useImageStore } from '@/stores/bgImage';
+import Player from './components/Player.vue';
 
 export default {
   name: 'App',
@@ -53,17 +53,17 @@ export default {
   },
   created() {
     if (auth.currentUser) {
-      this.setIsLoggedIn()
+      this.setIsLoggedIn();
     }
   },
   watch: {
     $route(to, from) {
-      const toDepth = to.path.split('/').length
-      const fromDepth = from.path.split('/').length
-      this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left'
+      const toDepth = to.path.split('/').length;
+      const fromDepth = from.path.split('/').length;
+      this.transitionName = toDepth < fromDepth ? 'slide-right' : 'slide-left';
     },
   },
-}
+};
 </script>
 
 <style>

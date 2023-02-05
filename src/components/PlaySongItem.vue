@@ -22,37 +22,36 @@
         :class="{ 'object-scale-down border border-zinc-500': !song.songImage }"
       />
     </div>
-    <div>
-      <router-link
-        :to="{ name: 'song', params: { id: song.songId } }"
-        class="font-bold block text-gray-600 hover:text-gray-600"
-      >
-        <p class="text-center truncate">{{ song.displayName }}</p>
-        <p class="text-white text-center truncate">
-          {{ song.modifiedName }}
-        </p></router-link
-      >
-    </div>
 
-    <div class="text-gray-200 text-lg bg-zinc-800 p-2 rounded-md mt-auto">
-      <router-link
+    <router-link
+      :to="{ name: 'song', params: { id: song.songId } }"
+      class="font-bold block text-gray-600 hover:text-gray-600"
+    >
+      <p class="text-center truncate">{{ song.displayName }}</p>
+      <p class="text-white text-center truncate mb-auto">
+        {{ song.modifiedName }}
+      </p>
+
+      <div class="text-gray-200 text-lg bg-zinc-800 p-2 rounded-md">
+        <!-- <router-link
         custom
         :to="{ name: 'song', params: { id: song.songId }, hash: '#comments' }"
         v-slot="{ navigate }"
-      >
+      > -->
         <p class="comments flex items-center" @click="navigate">
           <span class="mr-auto"> Comments</span>
           <i class="fa fa-comments mx-2 text-gray-600"></i>
           {{ song.comment_count }}
         </p>
-      </router-link>
-    </div>
+        <!-- </router-link> -->
+      </div>
+    </router-link>
   </li>
 </template>
 <script>
-import { mapActions } from 'pinia'
-import { usePlayerStore } from '@/stores/player'
-import { useImageStore } from '@/stores/bgImage'
+import { mapActions } from 'pinia';
+import { usePlayerStore } from '@/stores/player';
+import { useImageStore } from '@/stores/bgImage';
 
 export default {
   props: {
@@ -65,10 +64,10 @@ export default {
     ...mapActions(usePlayerStore, ['newSong']),
     ...mapActions(useImageStore, ['changeImage']),
     playSong() {
-      this.newSong(this.song)
-      this.changeImage(this.song.songImage)
+      this.newSong(this.song);
+      this.changeImage(this.song.songImage);
     },
   },
-}
+};
 </script>
 <style></style>
