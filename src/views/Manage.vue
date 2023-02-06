@@ -1,10 +1,10 @@
 <template>
-  <section class="container mx-auto mt-6">
+  <section class="p-4 max-w-[1154px] lg:p-0 mx-auto mt-6">
     <h1 class="uppercase font-bold text-5xl mb-10 text-white max-w-[500px]">
       Manage and upload songs the way you want
     </h1>
     <div class="grid md:grid md:grid-cols-3 md:gap-4">
-      <Upload :addSong="addSong" />
+      <Upload :addSong="addSong" class="mb-8" />
       <div class="col-span-2">
         <div class="bg-zinc-800 rounded-xl relative flex flex-col">
           <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
@@ -78,14 +78,14 @@ export default {
       next('/')
     }
   },
-  beforeRouteLeave(to, from, next) {
-    if (!this.updateUnsavedFlag) {
-      next()
-    } else {
-      const leave = confirm('You have unsaved changes. Do yo want to leave?')
-      next(leave)
-    }
-  },
+  // beforeRouteLeave(to, from, next) {
+  //   if (!this.updateUnsavedFlag) {
+  //     next()
+  //   } else {
+  //     const leave = confirm('You have unsaved changes. Do yo want to leave?')
+  //     next(leave)
+  //   }
+  // },
 }
 </script>
 <style></style>

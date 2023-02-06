@@ -1,10 +1,12 @@
 <template>
-  <main class="max-w-[1154px] mx-auto">
+  <main class="max-w-[1154px] mx-auto p-4 lg:p-0">
     <section class="h-[300px] mt-[80px]">
-      <h1 class="uppercase font-bold text-5xl text-white max-w-[500px]">
+      <h1
+        class="uppercase font-bold text-3xl lg:text-5xl text-white max-w-[500px]"
+      >
         Add Share Listen Music from anywhere
       </h1>
-      <p class="max-w-[600px] mt-3 text-xl text-[rgba(255,255,255,0.4)]">
+      <p class="max-w-[600px] mt-3 lg:text-xl text-[rgba(255,255,255,0.4)]">
         Create and collect amazing collections, discover new artists on a new
         project.
       </p>
@@ -15,7 +17,7 @@
       <div class="rounded relative flex flex-col">
         <div class="pt-6 pb-3 font-bold border-b mb-5">
           <span
-            class="card-title uppercase font-bold text-3xl text-gray-200 max-w-[500px]"
+            class="card-title uppercase font-bold text-xl lg:text-3xl text-gray-200 max-w-[500px]"
             >Recently posted songs</span
           >
           <!-- Icon -->
